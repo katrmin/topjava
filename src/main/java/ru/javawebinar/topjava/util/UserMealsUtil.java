@@ -23,7 +23,7 @@ public class UserMealsUtil {
                 new UserMeal(LocalDateTime.of(2020, Month.JANUARY, 31, 13, 0), "Обед", 500),
                 new UserMeal(LocalDateTime.of(2020, Month.JANUARY, 31, 20, 0), "Ужин", 410)
 
-//                ,//проверка на то же число другого года
+//                ,//test same date of another year
 //                new UserMeal(LocalDateTime.of(2019, Month.JANUARY, 31, 0, 0), "Еда на граничное значение", 100),
 //                new UserMeal(LocalDateTime.of(2019, Month.JANUARY, 31, 10, 0), "Завтрак", 1000),
 //                new UserMeal(LocalDateTime.of(2019, Month.JANUARY, 31, 13, 0), "Обед", 500),
@@ -36,27 +36,25 @@ public class UserMealsUtil {
 
 
         System.out.println(filteredByStreams(meals, LocalTime.of(7, 0), LocalTime.of(12, 0), 2000));
-//        System.out.println(filteredByStreams(meals, LocalTime.of(0, 0), LocalTime.of(23, 0), 2000));//проверка всех записей за каждый день
-//        System.out.println(filteredByStreams(meals, LocalTime.of(0, 0), LocalTime.of(23, 0), 2010));//проверка, что все записи не превышают порог
-//        System.out.println(filteredByStreams(meals, LocalTime.of(0, 0), LocalTime.of(23, 0), 1000));//проверка, что все записи превышают порог
-//        пишу записи, поскольку стримы мне кажутся аналогичными базам данных в части языка манипуляции с данными ))
+//        System.out.println(filteredByStreams(meals, LocalTime.of(0, 0), LocalTime.of(23, 0), 2000));//test all records
+//        System.out.println(filteredByStreams(meals, LocalTime.of(0, 0), LocalTime.of(23, 0), 2010));//test all record do not exceed the specified value
+//        System.out.println(filteredByStreams(meals, LocalTime.of(0, 0), LocalTime.of(23, 0), 1000));//test all record  exceed the specified value
 
     }
 
-    // не стала реализовывать
     public static List<UserMealWithExcess> filteredByCycles(List<UserMeal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
         // TODO return filtered list with excess. Implement by cycles
         return null;
     }
 
     public static List<UserMealWithExcess> filteredByStreams(List<UserMeal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
-        Map<LocalDate, Integer> dateTotalCalories = meals.stream()
-                .collect(Collectors.groupingBy(o -> o.getDateTime().toLocalDate(), Collectors.summingInt(value -> value.getCalories())));
+        Map<LocalDate, Integer> totalCaloriesByDates = meals.stream()
+                .collect(Collectors.groupingBy(userMeal -> userMeal.getDateTime().toLocalDate(), Collectors.summingInt(UserMeal::getCalories)));
 
         return meals.stream()
-                .filter(um -> TimeUtil.isBetweenHalfOpen(um.getDateTime().toLocalTime(), startTime, endTime))
+                .filter(userMeal -> TimeUtil.isBetweenHalfOpen(userMeal.getDateTime().toLocalTime(), startTime, endTime))
                 .map(userMeal -> new UserMealWithExcess(userMeal.getDateTime(), userMeal.getDescription(), userMeal.getCalories(),
-                        dateTotalCalories.get(userMeal.getDateTime().toLocalDate()) > caloriesPerDay))
+                        totalCaloriesByDates.get(userMeal.getDateTime().toLocalDate()) > caloriesPerDay))
                 .collect(Collectors.toList());
     }
 }
