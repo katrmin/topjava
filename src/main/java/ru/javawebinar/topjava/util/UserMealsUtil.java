@@ -54,18 +54,20 @@ public class UserMealsUtil {
             totalCaloriesByDates.put(um.getDateTime().toLocalDate(),
                     totalCaloriesByDates.getOrDefault(um.getDateTime().toLocalDate(), 0) + um.getCalories());
         }
-        List<UserMeal> filteredMeals = new ArrayList<>();
 
+        List<UserMeal> filteredMeals = new ArrayList<>();
         for (UserMeal um : meals) {
             if (TimeUtil.isBetweenHalfOpen(um.getDateTime().toLocalTime(), startTime, endTime)) {
                 filteredMeals.add(um);
             }
         }
+
         List<UserMealWithExcess> mealWithExcesses = new ArrayList<>();
         for (UserMeal um : filteredMeals) {
             mealWithExcesses.add(new UserMealWithExcess(um.getDateTime(), um.getDescription(), um.getCalories(),
                     totalCaloriesByDates.get(um.getDateTime().toLocalDate()) > caloriesPerDay));
         }
+
         return mealWithExcesses;
     }
 
