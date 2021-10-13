@@ -16,5 +16,4 @@ public class MealServlet extends HttpServlet {
         log.debug("redirect to meals");
         response.sendRedirect("meals.jsp");
     }
-
 }
