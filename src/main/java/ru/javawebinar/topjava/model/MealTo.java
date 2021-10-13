@@ -1,7 +1,11 @@
 package ru.javawebinar.topjava.model;
 
-import java.time.LocalDateTime;
+import lombok.Data;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+@Data
 public class MealTo {
     private final LocalDateTime dateTime;
 
@@ -19,9 +23,9 @@ public class MealTo {
     }
 
     @Override
-    public String toString() {
+    public String toString() {//2007-12-03T10:15:30.
         return "MealTo{" +
-                "dateTime=" + dateTime +
+                "dateTime=" + dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")) +
                 ", description='" + description + '\'' +
                 ", calories=" + calories +
                 ", excess=" + excess +
