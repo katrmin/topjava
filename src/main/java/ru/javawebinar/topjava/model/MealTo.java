@@ -23,7 +23,7 @@ public class MealTo {
     }
 
     @Override
-    public String toString() {//2007-12-03T10:15:30.
+    public String toString() {
         return "MealTo{" +
                 "dateTime=" + dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")) +
                 ", description='" + description + '\'' +
