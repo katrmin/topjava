@@ -8,16 +8,28 @@
 <h3><a href="index.html">Home</a></h3>
 <hr>
 <h2>Meals</h2>
-<c:forEach items="${requestScope.mealsList}" var="meal">
-    <h2>
-        <c:set var="color" value="green"/>
-        <c:if test="${meal.excess eq true}">
-            <c:set var="color" value="red"/>
-        </c:if>
-        <span style="color: <c:out value="${color}"/>; ">
-            <c:out value="${meal}"/>
-        </span>
-    </h2>
-</c:forEach>
+<table border=1>
+    <thead>
+    <tr>
+        <th>Date</th>
+        <th>Description</th>
+        <th>Calories</th>
+        <th/>
+        <th/>
+    </tr>
+    </thead>
+    <tbody>
+    <c:forEach items="${requestScope.mealsList}" var="meal">
+        <tr>
+            <td style="color: ${meal.color}; ">${meal.dateTime}</td>
+            <td style="color: ${meal.color}; ">${meal.description}</td>
+            <td style="color: ${meal.color}; ">${meal.calories}</td>
+            <td><a href="MealController?action=edit&userId=${meal.id}">Update</a></td>
+            <td><a href="MealController?action=delete&userId=${meal.id}">Delete</a></td>
+        </tr>
+    </c:forEach>
+    </tbody>
+</table>
+<p><a href="MealController?action=insert">Add Meal</a></p>
 </body>
 </html>
