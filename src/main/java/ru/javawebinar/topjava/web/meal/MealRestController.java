@@ -1,43 +1,37 @@
 package ru.javawebinar.topjava.web.meal;
 
 import org.springframework.stereotype.Controller;
-import ru.javawebinar.topjava.model.User;
+import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.service.MealService;
-import ru.javawebinar.topjava.web.user.AbstractUserController;
+import ru.javawebinar.topjava.to.MealTo;
 
 import java.util.List;
 
 @Controller
-public class MealRestController  extends AbstractUserController {
-    private MealService service;
+public class MealRestController  {
+    private final MealService service;
 
-    @Override
-    public List<User> getAll() {
-        return super.getAll();
+    public MealRestController(MealService service) {
+        this.service = service;
     }
 
-    @Override
-    public User get(int id) {
-        return super.get(id);
+    public List<MealTo> getAll() {
+        return service.getAll();
     }
 
-    @Override
-    public User create(User user) {
-        return super.create(user);
+    public MealTo get(int id, Integer userId) {
+        return service.get(id, userId);
     }
 
-    @Override
-    public void delete(int id) {
-        super.delete(id);
+    public MealTo create(Meal meal, Integer userId) {
+        return service.create(meal, userId);
     }
 
-    @Override
-    public void update(User user, int id) {
-        super.update(user, id);
+    public void delete(int id, Integer userId) {
+        service.delete(id, userId);
     }
 
-    @Override
-    public User getByMail(String email) {
-        return super.getByMail(email);
+    public void update(Meal meal, Integer userId) {
+        service.update(meal, userId);
     }
 }
