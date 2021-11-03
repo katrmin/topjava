@@ -3,37 +3,44 @@ package ru.javawebinar.topjava.model;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+
 @Entity
-@Table(name = Meal.TABLE_NAME)
+@Table(name = Meal.TABLE_NAME, indexes = @Index(columnList = "user_id, date_time", unique = true))
 public class Meal extends AbstractBaseEntity {
 
     public static final String TABLE_NAME = "meals";
 
-    @Column(name = "date_time", nullable = false, columnDefinition = "timestamp default now()")
+    @Column(name = "date_time", nullable = false, columnDefinition = "timestamp")
     @NotNull
     private LocalDateTime dateTime;
 
+    @Size(min = 2,max = 120)
     @Column(name = "description", nullable = false)
     @NotBlank
     private String description;
 
     @Column(name = "calories", nullable = false)
-    @Positive
+    @Min(10)
+    @Max(5000)
     private int calories;
 
+    @NotNull
     @NotEmpty
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="user_id")
+    @JoinColumn(name="user_id", nullable = false)
     private User user;
 
     public Meal() {
