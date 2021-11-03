@@ -22,7 +22,7 @@ import java.time.LocalTime;
         @NamedQuery(name = Meal.BY_ID_AND_USER_ID, query = "select m FROM Meal m JOIN FETCH m.user WHERE m.id=:id and m.user.id=:userId"),
         @NamedQuery(name = Meal.BETWEEN_START_AND_END_DATIMES_BY_USER_ID, query = "SELECT m FROM Meal m JOIN FETCH m.user " +
                 "WHERE m.user.id=:userId and m.dateTime>=:startDT and m.dateTime<:endDT"),
-        @NamedQuery(name = Meal.ALL_BY_USER_ID, query = "SELECT m FROM Meal m JOIN FETCH m.user where m.user.id=:userId"),
+        @NamedQuery(name = Meal.ALL_BY_USER_ID, query = "SELECT m FROM Meal m JOIN FETCH m.user where m.user.id=:userId order by m.dateTime desc"),
 })
 @Entity
 @Table(name = Meal.TABLE_NAME, indexes = @Index(columnList = "user_id, date_time", unique = true))
