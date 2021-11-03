@@ -6,6 +6,8 @@ import javax.persistence.FetchType;
 import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -17,11 +19,20 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
+@NamedQueries({
+        @NamedQuery(name = Meal.BY_ID_AND_USER_ID, query = "select m FROM Meal m JOIN FETCH m.user WHERE m.id=:id and m.user.id=:userId"),
+        @NamedQuery(name = Meal.BETWEEN_START_AND_END_DATIMES_BY_USER_ID, query = "SELECT m FROM Meal m JOIN FETCH m.user " +
+                "WHERE m.user.id=:userId and m.dateTime>=:startDT and m.dateTime<:endDT"),
+        @NamedQuery(name = Meal.ALL_BY_USER_ID, query = "SELECT m FROM Meal m JOIN FETCH m.user where m.user.id=:userId"),
+})
 @Entity
 @Table(name = Meal.TABLE_NAME, indexes = @Index(columnList = "user_id, date_time", unique = true))
 public class Meal extends AbstractBaseEntity {
 
     public static final String TABLE_NAME = "meals";
+    public static final String BY_ID_AND_USER_ID = "Meal.getByIdAndUserId";
+    public static final String ALL_BY_USER_ID = "Meal.getAllByUserID";
+    public static final String BETWEEN_START_AND_END_DATIMES_BY_USER_ID = "Meal.getBetweenHalfOpen";
 
     @Column(name = "date_time", nullable = false, columnDefinition = "timestamp")
     @NotNull
