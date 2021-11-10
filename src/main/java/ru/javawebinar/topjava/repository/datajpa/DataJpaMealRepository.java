@@ -3,23 +3,19 @@ package ru.javawebinar.topjava.repository.datajpa;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.topjava.model.Meal;
-import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.MealRepository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
 public class DataJpaMealRepository implements MealRepository {
-    @PersistenceContext
-    EntityManager em;
-
     private final CrudMealRepository crudRepository;
+    private final CrudUserRepository crudUserRepository;
 
-    public DataJpaMealRepository(CrudMealRepository crudRepository) {
+    public DataJpaMealRepository(CrudMealRepository crudRepository, CrudUserRepository crudUserRepository) {
         this.crudRepository = crudRepository;
+        this.crudUserRepository = crudUserRepository;
     }
 
     @Override
@@ -28,7 +24,7 @@ public class DataJpaMealRepository implements MealRepository {
         if (!meal.isNew() && get(meal.id(), userId) == null) {
             return null;
         }
-        meal.setUser(em.getReference(User.class, userId));
+        meal.setUser(crudUserRepository.getById(userId));
         return crudRepository.save(meal);
     }
 
