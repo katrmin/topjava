@@ -70,6 +70,7 @@ public class JspMealController extends AbstractMealController {
         model.addAttribute("meals", super.getBetween(startDate, startTime, endDate, endTime));
         return "forward:meals";
     }
+
     @GetMapping("/mealForm")
     public String getMealForm(HttpServletRequest request, Model model) {
         final Meal meal = (StringUtils.hasLength(request.getParameter("id"))) ?
@@ -78,6 +79,7 @@ public class JspMealController extends AbstractMealController {
         model.addAttribute("meal", meal);
         return "forward:mealForm";
     }
+
     @GetMapping("/")
     public String root(HttpServletRequest request, Model model) {
         model.addAttribute("meals", super.getAll());
